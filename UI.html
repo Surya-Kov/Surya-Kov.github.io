@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code-Ulingo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f0f0f0; display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 200px;
+      background: white;
+      border-right: 2px solid #ddd;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .logo { font-size: 22px; font-weight: bold; color: #58cc02; margin-bottom: 16px; text-align: center; }
+    .nav-btn {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: none;
+      font-size: 15px;
+      font-weight: bold;
+      color: #555;
+      cursor: pointer;
+      text-align: left;
+    }
+    .nav-btn:hover { background: #f0f0f0; }
+    .nav-btn.active { background: #d7f5b1; color: #3a8c00; }
+    .streak {
+      margin-top: auto;
+      background: #fff3cc;
+      border: 2px solid #ff9600;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+    .streak .num { font-size: 28px; font-weight: bold; color: #ff9600; }
+    .streak .label { font-size: 12px; font-weight: bold; color: #a66800; }
+
+    /* MAIN */
+    .main { flex: 1; padding: 28px; max-width: 750px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .topbar h1 { font-size: 22px; }
+    .topbar h1 span { color: #58cc02; }
+    .stats { display: flex; gap: 10px; }
+    .pill {
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* XP BAR */
+    .xp-box { background: white; border: 2px solid #ddd; border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; }
+    .xp-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #777; margin-bottom: 8px; }
+    .xp-track { background: #eee; border-radius: 999px; height: 16px; overflow: hidden; }
+    .xp-fill { width: 62%; height: 100%; background: #9b5de5; border-radius: 999px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 4px; background: white; border: 2px solid #ddd; border-radius: 12px; padding: 4px; margin-bottom: 20px; }
+    .tab { flex: 1; padding: 9px; border: none; border-radius: 9px; font-size: 14px; font-weight: bold; cursor: pointer; background: none; color: #777; }
+    .tab:hover { background: #f0f0f0; }
+    .tab.active { background: #58cc02; color: white; }
+
+    /* VIEWS */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* LESSON CARDS */
+    .card {
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .card:hover { border-color: #58cc02; transform: translateY(-2px); }
+    .card.locked { opacity: 0.45; cursor: not-allowed; }
+    .card.locked:hover { transform: none; border-color: #ddd; }
+    .card-icon { font-size: 30px; width: 52px; height: 52px; border-radius: 12px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .card-info { flex: 1; }
+    .card-info h3 { font-size: 16px; margin-bottom: 4px; }
+    .card-info p { font-size: 13px; color: #777; }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .bar-track { flex: 1; height: 7px; background: #eee; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: #58cc02; border-radius: 999px; }
+    .bar-pct { font-size: 12px; font-weight: bold; color: #3a8c00; }
+    .badge { padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+    .b-done { background: #d7f5b1; color: #3a8c00; border: 2px solid #58cc02; }
+    .b-go   { background: #58cc02; color: white; border: 2px solid #3a8c00; }
+    .b-more { background: #ddf4ff; color: #0a91cc; border: 2px solid #1cb0f6; }
+    .b-lock { background: #eee;    color: #999;    border: 2px solid #ddd; }
+
+    /* QUIZ MODAL */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
+    .overlay.open { display: flex; }
+    .modal { background: white; border-radius: 20px; padding: 28px; width: 560px; max-width: 95vw; position: relative; }
+    .close-btn { position: absolute; top: 14px; right: 14px; border: 2px solid #ddd; background: #f0f0f0; border-radius: 999px; width: 32px; height: 32px; font-size: 16px; cursor: pointer; font-weight: bold; }
+    .close-btn:hover { background: #ffdfe0; border-color: #ff4b4b; color: #ff4b4b; }
+    .modal h2 { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #1cb0f6; margin-bottom: 6px; }
+    .modal h3 { font-size: 19px; font-weight: bold; margin-bottom: 18px; }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .choice {
+      padding: 13px 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      background: white;
+      text-align: left;
+    }
+    .choice:hover { border-color: #1cb0f6; background: #ddf4ff; color: #0a91cc; }
+    .choice.correct { border-color: #58cc02; background: #d7f5b1; color: #3a8c00; }
+    .choice.wrong   { border-color: #ff4b4b; background: #ffdfe0; color: #ff4b4b; }
+    .feedback { border-radius: 10px; padding: 14px; margin-top: 16px; font-weight: bold; font-size: 14px; display: none; }
+    .feedback.show { display: block; }
+    .feedback.ok  { background: #d7f5b1; color: #3a8c00; border: 2px solid #58cc02; }
+    .feedback.err { background: #ffdfe0; color: #ff4b4b; border: 2px solid #ff4b4b; }
+    .check-btn {
+      margin-top: 16px; width: 100%; padding: 13px;
+      background: #58cc02; color: white; border: none; border-bottom: 4px solid #3a8c00;
+      border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
+    }
+    .check-btn:disabled { background: #ddd; color: #999; border-bottom-color: #bbb; cursor: not-allowed; }
+    .check-btn:hover:not(:disabled) { filter: brightness(1.05); }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">💻 Code-Ulingo</div>
+  <button class="nav-btn active" onclick="setNav(this)">🏠 Learn</button>
+  <button class="nav-btn" onclick="setNav(this)">⌨️ Practice</button>
+  <button class="nav-btn" onclick="setNav(this)">🏆 Leaderboard</button>
+  <button class="nav-btn" onclick="setNav(this)">👤 Profile</button>
+  <div class="streak">
+    <div class="num">🔥 7</div>
+    <div class="label">Day streak!</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+    <h1>Welcome back, <span>Alex! 👋</span></h1>
+    <div class="stats">
+      <div class="pill">💎 1,240 XP</div>
+      <div class="pill">❤️ 5</div>
+    </div>
+  </div>
+
+  <!-- XP BAR -->
+  <div class="xp-box">
+    <div class="xp-label"><span>🟣 Level 4 · Junior Developer</span><span>1,240 / 2,000 XP</span></div>
+    <div class="xp-track"><div class="xp-fill"></div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(this,'learn')">🗺️ Learning Path</button>
+    <button class="tab" onclick="switchTab(this,'practice')">⌨️ Practice</button>
+    <button class="tab" onclick="switchTab(this,'achievements')">🎖️ Achievements</button>
+  </div>
+
+  <!-- LEARN VIEW -->
+  <div id="tab-learn" class="view active">
+
+    <div class="card" onclick="openQuiz('HTML Basics','Which tag makes the biggest heading?',['&lt;h6&gt;','&lt;h1&gt;','&lt;big&gt;','&lt;p&gt;'],1)">
+      <div class="card-icon">🌐</div>
+      <div class="card-info">
+        <h3>1. HTML Basics</h3>
+        <p>Tags, structure, and your first webpage</p>
+        <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-pct">✅ Done</span></div>
+      </div>
+      <div class="badge b-done">★ 100%</div>
+    </div>
+
+    <div class="card" onclick="openQuiz('CSS Styling','What property changes text color?',['font-size','background','color','display'],2)">
+      <div class="card-icon">🎨</div>
+      <div class="card-info">
+        <h3>2. CSS Styling</h3>
+        <p>Colors, fonts, and design</p>
+        <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:45%"></div></div><span class="bar-pct">45%</span></div>
+      </div>
+      <div class="badge b-more">▶ Continue</div>
+    </div>
+
+    <div class="card" onclick="openQuiz('JavaScript','How do you declare a variable?',['def','var','int','let'],3)">
+      <div class="card-icon">⚡</div>
+      <div class="card-info">
+        <h3>3. JavaScript</h3>
+        <p>Make your page interactive</p>
+        <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:10%"></div></div><span class="bar-pct">10%</span></div>
+      </div>
+      <div class="badge b-go">▶ Start</div>
+    </div>
+
+    <div class="card locked">
+      <div class="card-icon">🔁</div>
+      <div class="card-info">
+        <h3>4. Loops &amp; Logic</h3>
+        <p>Repeat actions and make decisions</p>
+        <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-pct">0%</span></div>
+      </div>
+      <div class="badge b-lock">🔒 Locked</div>
+    </div>
+
+    <div class="card locked">
+      <div class="card-icon">🐍</div>
+      <div class="card-info">
+        <h3>5. Intro to Python</h3>
+        <p>Your second coding language</p>
+        <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div><span class="bar-pct">0%</span></div>
+      </div>
+      <div class="badge b-lock">🔒 Locked</div>
+    </div>
+
+  </div>
+
+  <!-- PRACTICE VIEW -->
+  <div id="tab-practice" class="view">
+    <div style="background:white;border:2px solid #ddd;border-radius:14px;padding:20px;">
+      <h2 style="font-size:17px;margin-bottom:8px;">🖊️ Daily Challenge</h2>
+      <p style="color:#777;font-size:13px;margin-bottom:16px;">Fill in the blank to complete the code!</p>
+      <div style="background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:10px;font-family:monospace;font-size:14px;line-height:1.7;">
+        let greeting = "Hello";<br>
+        let name = "World";<br>
+        console.log(greeting + " " + <span style="color:#ff9600;">_____</span>);
+      </div>
+      <div class="choices" style="margin-top:16px;">
+        <button class="choice" onclick="dailyPick(this,false)">greeting</button>
+        <button class="choice" onclick="dailyPick(this,true)">name</button>
+        <button class="choice" onclick="dailyPick(this,false)">"World"</button>
+        <button class="choice" onclick="dailyPick(this,false)">log</button>
+      </div>
+      <div id="dailyFeedback" class="feedback"></div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS VIEW -->
+  <div id="tab-achievements" class="view">
+    <div style="background:white;border:2px solid #ddd;border-radius:14px;padding:20px;margin-bottom:16px;">
+      <h2 style="font-size:16px;margin-bottom:14px;">🎖️ Badges</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🥇</div>
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🔥</div>
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🌐</div>
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">🎨</div>
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">⚡</div>
+        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">🐍</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="background:#d7f5b1;border:2px solid #58cc02;border-radius:12px;padding:16px;">
+        <div style="font-size:26px;font-weight:900;color:#3a8c00;">34</div>
+        <div style="font-size:13px;font-weight:bold;color:#3a8c00;">Lessons done</div>
+      </div>
+      <div style="background:#ddf4ff;border:2px solid #1cb0f6;border-radius:12px;padding:16px;">
+        <div style="font-size:26px;font-weight:900;color:#0a91cc;">1,240</div>
+        <div style="font-size:13px;font-weight:bold;color:#0a91cc;">Total XP</div>
+      </div>
+      <div style="background:#fff3cc;border:2px solid #ff9600;border-radius:12px;padding:16px;">
+        <div style="font-size:26px;font-weight:900;color:#a66800;">7 🔥</div>
+        <div style="font-size:13px;font-weight:bold;color:#a66800;">Day streak</div>
+      </div>
+      <div style="background:#f0d9ff;border:2px solid #a560d4;border-radius:12px;padding:16px;">
+        <div style="font-size:26px;font-weight:900;color:#a560d4;">Lvl 4</div>
+        <div style="font-size:13px;font-weight:bold;color:#a560d4;">Jr Developer</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUIZ MODAL -->
+<div class="overlay" id="overlay" onclick="outsideClose(event)">
+  <div class="modal">
+    <button class="close-btn" onclick="closeQuiz()">✕</button>
+    <h2 id="quizTitle">CSS Styling</h2>
+    <h3 id="quizQuestion">What property changes text color?</h3>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>Check Answer</button>
+  </div>
+</div>
+
+<script>
+  // Track which answer index is correct and which the user picked
+  let correctIdx = 0;
+  let pickedIdx = null;
+
+  // Highlight the active sidebar button
+  function setNav(btn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Show the right tab content when a tab is clicked
+  function switchTab(btn, id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+  }
+
+  // Open the quiz modal and fill it with the lesson's question and choices
+  function openQuiz(title, question, choices, correct) {
+    correctIdx = correct;
+    pickedIdx = null;
+
+    document.getElementById('quizTitle').textContent = '📘 ' + title;
+    document.getElementById('quizQuestion').textContent = question;
+    document.getElementById('quizFeedback').className = 'feedback';
+    document.getElementById('checkBtn').disabled = true;
+    document.getElementById('checkBtn').textContent = 'Check Answer';
+    document.getElementById('checkBtn').onclick = checkAnswer;
+
+    // Build the choice buttons dynamically
+    const box = document.getElementById('quizChoices');
+    box.innerHTML = '';
+    choices.forEach((text, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      btn.innerHTML = text;
+      btn.onclick = () => pickChoice(btn, i);
+      box.appendChild(btn);
+    });
+
+    document.getElementById('overlay').classList.add('open');
+  }
+
+  // Highlight the selected choice and enable the check button
+  function pickChoice(btn, idx) {
+    document.querySelectorAll('#quizChoices .choice').forEach(b => {
+      b.classList.remove('correct', 'wrong');
+      b.style.cssText = '';
+    });
+    btn.style.borderColor = '#1cb0f6';
+    btn.style.background = '#ddf4ff';
+    btn.style.color = '#0a91cc';
+    pickedIdx = idx;
+    document.getElementById('checkBtn').disabled = false;
+  }
+
+  // Check if the user's pick is correct or wrong
+  function checkAnswer() {
+    if (pickedIdx === null) return;
+    const btns = document.querySelectorAll('#quizChoices .choice');
+    const fb = document.getElementById('quizFeedback');
+
+    btns.forEach(b => { b.style.cssText = ''; });
+
+    if (pickedIdx === correctIdx) {
+      btns[pickedIdx].classList.add('correct');
+      fb.className = 'feedback ok show';
+      fb.textContent = '🎉 Correct! +10 XP!';
+      document.getElementById('checkBtn').textContent = 'Continue ▶';
+      document.getElementById('checkBtn').onclick = closeQuiz;
+    } else {
+      btns[pickedIdx].classList.add('wrong');
+      btns[correctIdx].classList.add('correct');
+      fb.className = 'feedback err show';
+      fb.textContent = '❌ Not quite! The correct answer is in green.';
+      document.getElementById('checkBtn').textContent = 'Try Again';
+      document.getElementById('checkBtn').onclick = resetQuiz;
+    }
+  }
+
+  // Reset the quiz so the user can try again
+  function resetQuiz() {
+    document.querySelectorAll('#quizChoices .choice').forEach(b => {
+      b.classList.remove('correct', 'wrong');
+      b.style.cssText = '';
+    });
+    document.getElementById('quizFeedback').className = 'feedback';
+    document.getElementById('checkBtn').textContent = 'Check Answer';
+    document.getElementById('checkBtn').disabled = true;
+    document.getElementById('checkBtn').onclick = checkAnswer;
+    pickedIdx = null;
+  }
+
+  // Close the quiz modal
+  function closeQuiz() {
+    document.getElementById('overlay').classList.remove('open');
+    resetQuiz();
+  }
+
+  // Close modal when clicking outside of it
+  function outsideClose(e) {
+    if (e.target === document.getElementById('overlay')) closeQuiz();
+  }
+
+  // Handle the daily practice challenge
+  function dailyPick(btn, isCorrect) {
+    document.querySelectorAll('#tab-practice .choice').forEach(b => b.classList.remove('correct', 'wrong'));
+    const fb = document.getElementById('dailyFeedback');
+    if (isCorrect) {
+      btn.classList.add('correct');
+      fb.className = 'feedback ok show';
+      fb.textContent = '🎉 Correct! "name" finishes the greeting! +15 XP!';
+    } else {
+      btn.classList.add('wrong');
+      fb.className = 'feedback err show';
+      fb.textContent = '❌ Not quite — try another option!';
+    }
+  }
+</script>
+</body>
+</html>
