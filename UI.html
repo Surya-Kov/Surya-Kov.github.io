@@ -3,161 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <title>Code-Ulingo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background: #f0f0f0; display: flex; min-height: 100vh; }
+    :root {
+      --dark:    #0D1117;
+      --navy:    #161B22;
+      --card:    #1C2128;
+      --border:  #30363D;
+      --green:   #00FF88;
+      --green-d: #00CC6A;
+      --blue:    #58A6FF;
+      --purple:  #BC8CFF;
+      --orange:  #FFA657;
+      --white:   #F0F6FC;
+      --gray:    #8B949E;
+      --red:     #FF6B6B;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      display: flex;
+      min-height: 100vh;
+    }
 
-    /* SIDEBAR */
+    /* ── SIDEBAR ── */
     .sidebar {
-      width: 200px;
-      background: white;
-      border-right: 2px solid #ddd;
-      padding: 20px 12px;
+      width: 210px;
+      background: var(--navy);
+      border-right: 1px solid var(--border);
+      padding: 22px 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
-    .logo { font-size: 22px; font-weight: bold; color: #58cc02; margin-bottom: 16px; text-align: center; }
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--white); }
     .nav-btn {
       padding: 10px 14px;
       border: none;
       border-radius: 10px;
       background: none;
-      font-size: 15px;
-      font-weight: bold;
-      color: #555;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray);
       cursor: pointer;
       text-align: left;
+      transition: all 0.15s;
     }
-    .nav-btn:hover { background: #f0f0f0; }
-    .nav-btn.active { background: #d7f5b1; color: #3a8c00; }
+    .nav-btn:hover { background: var(--card); color: var(--white); }
+    .nav-btn.active { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.25); }
+
     .streak {
       margin-top: auto;
-      background: #fff3cc;
-      border: 2px solid #ff9600;
+      background: rgba(255,166,87,0.1);
+      border: 1px solid rgba(255,166,87,0.4);
       border-radius: 12px;
-      padding: 12px;
+      padding: 14px;
       text-align: center;
     }
-    .streak .num { font-size: 28px; font-weight: bold; color: #ff9600; }
-    .streak .label { font-size: 12px; font-weight: bold; color: #a66800; }
+    .streak .num { font-size: 30px; font-weight: 900; color: var(--orange); }
+    .streak .label { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
 
-    /* MAIN */
-    .main { flex: 1; padding: 28px; max-width: 750px; }
-    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .topbar h1 { font-size: 22px; }
-    .topbar h1 span { color: #58cc02; }
-    .stats { display: flex; gap: 10px; }
+    /* ── MAIN ── */
+    .main { flex: 1; padding: 28px 32px; max-width: 800px; }
+
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+    .topbar h1 { font-size: 20px; font-weight: 700; color: var(--white); }
+    .topbar h1 span { color: var(--green); }
+    .stats { display: flex; gap: 8px; }
     .pill {
-      background: white;
-      border: 2px solid #ddd;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 999px;
       padding: 6px 14px;
-      font-size: 14px;
-      font-weight: bold;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--white);
     }
 
-    /* XP BAR */
-    .xp-box { background: white; border: 2px solid #ddd; border-radius: 14px; padding: 16px 20px; margin-bottom: 20px; }
-    .xp-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #777; margin-bottom: 8px; }
-    .xp-track { background: #eee; border-radius: 999px; height: 16px; overflow: hidden; }
-    .xp-fill { width: 62%; height: 100%; background: #9b5de5; border-radius: 999px; }
+    /* ── XP BAR ── */
+    .xp-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+    }
+    .xp-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--gray); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .xp-track { background: var(--dark); border-radius: 999px; height: 10px; overflow: hidden; border: 1px solid var(--border); }
+    .xp-fill { width: 62%; height: 100%; background: linear-gradient(90deg, var(--purple), var(--blue)); border-radius: 999px; position: relative; }
+    .xp-fill::after { content:''; position:absolute; right:0; top:0; bottom:0; width:6px; background: var(--blue); border-radius:999px; box-shadow: 0 0 8px var(--blue); }
 
-    /* TABS */
-    .tabs { display: flex; gap: 4px; background: white; border: 2px solid #ddd; border-radius: 12px; padding: 4px; margin-bottom: 20px; }
-    .tab { flex: 1; padding: 9px; border: none; border-radius: 9px; font-size: 14px; font-weight: bold; cursor: pointer; background: none; color: #777; }
-    .tab:hover { background: #f0f0f0; }
-    .tab.active { background: #58cc02; color: white; }
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
+    .tab { flex: 1; padding: 9px; border: none; border-radius: 9px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; background: none; color: var(--gray); transition: all 0.15s; }
+    .tab:hover { background: var(--dark); color: var(--white); }
+    .tab.active { background: var(--dark); color: var(--green); border: 1px solid rgba(0,255,136,0.25); }
 
-    /* VIEWS */
+    /* ── VIEWS ── */
     .view { display: none; }
     .view.active { display: block; }
 
-    /* LESSON CARDS */
+    /* ── LESSON CARDS ── */
     .card {
-      background: white;
-      border: 2px solid #ddd;
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       cursor: pointer;
-      transition: 0.15s;
+      transition: all 0.18s;
     }
-    .card:hover { border-color: #58cc02; transform: translateY(-2px); }
-    .card.locked { opacity: 0.45; cursor: not-allowed; }
-    .card.locked:hover { transform: none; border-color: #ddd; }
-    .card-icon { font-size: 30px; width: 52px; height: 52px; border-radius: 12px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,255,136,0.08); }
+    .card.locked { opacity: 0.4; cursor: not-allowed; }
+    .card.locked:hover { transform: none; border-color: var(--border); box-shadow: none; }
+    .card-icon { font-size: 26px; width: 50px; height: 50px; border-radius: 12px; background: var(--dark); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .card-info { flex: 1; }
-    .card-info h3 { font-size: 16px; margin-bottom: 4px; }
-    .card-info p { font-size: 13px; color: #777; }
+    .card-info h3 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+    .card-info p { font-size: 12px; color: var(--gray); }
     .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
-    .bar-track { flex: 1; height: 7px; background: #eee; border-radius: 999px; overflow: hidden; }
-    .bar-fill { height: 100%; background: #58cc02; border-radius: 999px; }
-    .bar-pct { font-size: 12px; font-weight: bold; color: #3a8c00; }
-    .badge { padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: bold; flex-shrink: 0; }
-    .b-done { background: #d7f5b1; color: #3a8c00; border: 2px solid #58cc02; }
-    .b-go   { background: #58cc02; color: white; border: 2px solid #3a8c00; }
-    .b-more { background: #ddf4ff; color: #0a91cc; border: 2px solid #1cb0f6; }
-    .b-lock { background: #eee;    color: #999;    border: 2px solid #ddd; }
+    .bar-track { flex: 1; height: 6px; background: var(--dark); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+    .bar-fill { height: 100%; background: var(--green); border-radius: 999px; }
+    .bar-pct { font-size: 11px; font-weight: 700; color: var(--green); white-space: nowrap; }
+    .badge { padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; flex-shrink: 0; letter-spacing: 0.2px; }
+    .b-done { background: rgba(0,255,136,0.12); color: var(--green); border: 1px solid rgba(0,255,136,0.35); }
+    .b-go   { background: var(--green); color: var(--dark); border: 1px solid var(--green-d); }
+    .b-more { background: rgba(88,166,255,0.12); color: var(--blue); border: 1px solid rgba(88,166,255,0.35); }
+    .b-lock { background: var(--dark); color: var(--gray); border: 1px solid var(--border); }
 
-    /* QUIZ MODAL */
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 100; }
-    .overlay.open { display: flex; }
-    .modal { background: white; border-radius: 20px; padding: 28px; width: 560px; max-width: 95vw; position: relative; }
-    .close-btn { position: absolute; top: 14px; right: 14px; border: 2px solid #ddd; background: #f0f0f0; border-radius: 999px; width: 32px; height: 32px; font-size: 16px; cursor: pointer; font-weight: bold; }
-    .close-btn:hover { background: #ffdfe0; border-color: #ff4b4b; color: #ff4b4b; }
-    .modal h2 { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #1cb0f6; margin-bottom: 6px; }
-    .modal h3 { font-size: 19px; font-weight: bold; margin-bottom: 18px; }
-    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    /* ── PRACTICE ── */
+    .practice-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+    .practice-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .practice-card p { color: var(--gray); font-size: 13px; margin-bottom: 16px; }
+    .code-block { background: var(--dark); color: #CDD6F4; padding: 16px; border-radius: 10px; font-family: 'Space Mono', monospace; font-size: 13px; line-height: 1.8; border: 1px solid var(--border); }
+    .code-blank { color: var(--orange); }
+
+    /* ── CHOICES ── */
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
     .choice {
       padding: 13px 15px;
-      border: 2px solid #ddd;
+      border: 1px solid var(--border);
       border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      background: white;
+      background: var(--dark);
+      color: var(--white);
       text-align: left;
+      transition: all 0.15s;
     }
-    .choice:hover { border-color: #1cb0f6; background: #ddf4ff; color: #0a91cc; }
-    .choice.correct { border-color: #58cc02; background: #d7f5b1; color: #3a8c00; }
-    .choice.wrong   { border-color: #ff4b4b; background: #ffdfe0; color: #ff4b4b; }
-    .feedback { border-radius: 10px; padding: 14px; margin-top: 16px; font-weight: bold; font-size: 14px; display: none; }
+    .choice:hover { border-color: var(--blue); background: rgba(88,166,255,0.08); color: var(--blue); }
+    .choice.selected { border-color: var(--blue); background: rgba(88,166,255,0.12); color: var(--blue); }
+    .choice.correct { border-color: var(--green); background: rgba(0,255,136,0.1); color: var(--green); }
+    .choice.wrong   { border-color: var(--red); background: rgba(255,107,107,0.1); color: var(--red); }
+    .choice:disabled, .choice[disabled] { cursor: not-allowed; }
+
+    .feedback { border-radius: 10px; padding: 14px; margin-top: 16px; font-weight: 700; font-size: 14px; display: none; }
     .feedback.show { display: block; }
-    .feedback.ok  { background: #d7f5b1; color: #3a8c00; border: 2px solid #58cc02; }
-    .feedback.err { background: #ffdfe0; color: #ff4b4b; border: 2px solid #ff4b4b; }
+    .feedback.ok  { background: rgba(0,255,136,0.1); color: var(--green); border: 1px solid rgba(0,255,136,0.3); }
+    .feedback.err { background: rgba(255,107,107,0.1); color: var(--red); border: 1px solid rgba(255,107,107,0.3); }
+
     .check-btn {
       margin-top: 16px; width: 100%; padding: 13px;
-      background: #58cc02; color: white; border: none; border-bottom: 4px solid #3a8c00;
-      border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
+      background: var(--green); color: var(--dark);
+      border: none; border-bottom: 3px solid var(--green-d);
+      border-radius: 12px; font-family: 'Outfit', sans-serif;
+      font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.15s;
     }
-    .check-btn:disabled { background: #ddd; color: #999; border-bottom-color: #bbb; cursor: not-allowed; }
-    .check-btn:hover:not(:disabled) { filter: brightness(1.05); }
+    .check-btn:disabled { background: var(--border); color: var(--gray); border-bottom-color: var(--border); cursor: not-allowed; }
+    .check-btn:hover:not(:disabled) { filter: brightness(1.08); }
+
+    /* ── QUIZ MODAL ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); }
+    .overlay.open { display: flex; }
+    .modal {
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      width: 580px;
+      max-width: 95vw;
+      position: relative;
+      box-shadow: 0 0 60px rgba(0,255,136,0.06);
+    }
+
+    /* Progress bar inside modal */
+    .quiz-progress { margin-bottom: 20px; }
+    .quiz-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .quiz-progress-label { font-size: 11px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+    .quiz-progress-count { font-size: 11px; font-weight: 700; color: var(--green); }
+    .quiz-track { background: var(--dark); border-radius: 999px; height: 6px; overflow: hidden; border: 1px solid var(--border); }
+    .quiz-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); border-radius: 999px; transition: width 0.4s ease; }
+
+    .close-btn {
+      position: absolute; top: 14px; right: 14px;
+      border: 1px solid var(--border); background: var(--card);
+      border-radius: 999px; width: 30px; height: 30px;
+      font-size: 14px; cursor: pointer; font-weight: 700;
+      color: var(--gray); transition: all 0.15s;
+    }
+    .close-btn:hover { background: rgba(255,107,107,0.15); border-color: var(--red); color: var(--red); }
+
+    .modal-lesson { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+    .modal-question { font-size: 18px; font-weight: 700; margin-bottom: 18px; line-height: 1.4; }
+
+    /* Result screen */
+    .result-screen { display: none; text-align: center; padding: 10px 0; }
+    .result-screen.show { display: block; }
+    .result-emoji { font-size: 60px; margin-bottom: 12px; }
+    .result-title { font-size: 26px; font-weight: 900; margin-bottom: 8px; }
+    .result-sub { font-size: 14px; color: var(--gray); margin-bottom: 20px; }
+    .result-stats { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
+    .result-stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 22px; }
+    .result-stat .num { font-size: 26px; font-weight: 900; }
+    .result-stat .lbl { font-size: 11px; color: var(--gray); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+    .result-stat.green .num { color: var(--green); }
+    .result-stat.blue .num { color: var(--blue); }
+    .result-stat.orange .num { color: var(--orange); }
+
+    /* Achievements grid */
+    .ach-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; }
+    .ach-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+    .badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .badge-box {
+      aspect-ratio: 1; background: var(--dark); border-radius: 10px;
+      border: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: center; font-size: 26px;
+    }
+    .badge-box.earned { border-color: var(--orange); background: rgba(255,166,87,0.08); }
+    .badge-box.locked-b { opacity: 0.3; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-box { border-radius: 12px; padding: 16px; border: 1px solid; }
+    .stat-box .big { font-size: 28px; font-weight: 900; }
+    .stat-box .sm { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+    .sb-green { background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.25); }
+    .sb-green .big, .sb-green .sm { color: var(--green); }
+    .sb-blue { background: rgba(88,166,255,0.08); border-color: rgba(88,166,255,0.25); }
+    .sb-blue .big, .sb-blue .sm { color: var(--blue); }
+    .sb-orange { background: rgba(255,166,87,0.08); border-color: rgba(255,166,87,0.25); }
+    .sb-orange .big, .sb-orange .sm { color: var(--orange); }
+    .sb-purple { background: rgba(188,140,255,0.08); border-color: rgba(188,140,255,0.25); }
+    .sb-purple .big, .sb-purple .sm { color: var(--purple); }
   </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="logo">💻 Code-Ulingo</div>
+  <div class="logo">💻 <span>Code-</span>Ulingo</div>
   <button class="nav-btn active" onclick="setNav(this)">🏠 Learn</button>
   <button class="nav-btn" onclick="setNav(this)">⌨️ Practice</button>
   <button class="nav-btn" onclick="setNav(this)">🏆 Leaderboard</button>
   <button class="nav-btn" onclick="setNav(this)">👤 Profile</button>
   <div class="streak">
     <div class="num">🔥 7</div>
-    <div class="label">Day streak!</div>
+    <div class="label">Day Streak</div>
   </div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
-
   <div class="topbar">
-    <h1>Welcome back, <span>Alex! 👋</span></h1>
+    <h1>Welcome back, <span>User1265 👋</span></h1>
     <div class="stats">
       <div class="pill">💎 1,240 XP</div>
       <div class="pill">❤️ 5</div>
@@ -179,8 +304,7 @@
 
   <!-- LEARN VIEW -->
   <div id="tab-learn" class="view active">
-
-    <div class="card" onclick="openQuiz('HTML Basics','Which tag makes the biggest heading?',['&lt;h6&gt;','&lt;h1&gt;','&lt;big&gt;','&lt;p&gt;'],1)">
+    <div class="card" onclick="openQuiz('html')">
       <div class="card-icon">🌐</div>
       <div class="card-info">
         <h3>1. HTML Basics</h3>
@@ -189,8 +313,7 @@
       </div>
       <div class="badge b-done">★ 100%</div>
     </div>
-
-    <div class="card" onclick="openQuiz('CSS Styling','What property changes text color?',['font-size','background','color','display'],2)">
+    <div class="card" onclick="openQuiz('css')">
       <div class="card-icon">🎨</div>
       <div class="card-info">
         <h3>2. CSS Styling</h3>
@@ -199,8 +322,7 @@
       </div>
       <div class="badge b-more">▶ Continue</div>
     </div>
-
-    <div class="card" onclick="openQuiz('JavaScript','How do you declare a variable?',['def','var','int','let'],3)">
+    <div class="card" onclick="openQuiz('js')">
       <div class="card-icon">⚡</div>
       <div class="card-info">
         <h3>3. JavaScript</h3>
@@ -209,7 +331,6 @@
       </div>
       <div class="badge b-go">▶ Start</div>
     </div>
-
     <div class="card locked">
       <div class="card-icon">🔁</div>
       <div class="card-info">
@@ -219,7 +340,6 @@
       </div>
       <div class="badge b-lock">🔒 Locked</div>
     </div>
-
     <div class="card locked">
       <div class="card-icon">🐍</div>
       <div class="card-info">
@@ -229,20 +349,19 @@
       </div>
       <div class="badge b-lock">🔒 Locked</div>
     </div>
-
   </div>
 
   <!-- PRACTICE VIEW -->
   <div id="tab-practice" class="view">
-    <div style="background:white;border:2px solid #ddd;border-radius:14px;padding:20px;">
-      <h2 style="font-size:17px;margin-bottom:8px;">🖊️ Daily Challenge</h2>
-      <p style="color:#777;font-size:13px;margin-bottom:16px;">Fill in the blank to complete the code!</p>
-      <div style="background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:10px;font-family:monospace;font-size:14px;line-height:1.7;">
+    <div class="practice-card">
+      <h2>🖊️ Daily Challenge</h2>
+      <p>Fill in the blank to complete the code!</p>
+      <div class="code-block">
         let greeting = "Hello";<br>
         let name = "World";<br>
-        console.log(greeting + " " + <span style="color:#ff9600;">_____</span>);
+        console.log(greeting + " " + <span class="code-blank">_____</span>);
       </div>
-      <div class="choices" style="margin-top:16px;">
+      <div class="choices">
         <button class="choice" onclick="dailyPick(this,false)">greeting</button>
         <button class="choice" onclick="dailyPick(this,true)">name</button>
         <button class="choice" onclick="dailyPick(this,false)">"World"</button>
@@ -254,171 +373,264 @@
 
   <!-- ACHIEVEMENTS VIEW -->
   <div id="tab-achievements" class="view">
-    <div style="background:white;border:2px solid #ddd;border-radius:14px;padding:20px;margin-bottom:16px;">
-      <h2 style="font-size:16px;margin-bottom:14px;">🎖️ Badges</h2>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🥇</div>
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🔥</div>
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px solid #ff9600;display:flex;align-items:center;justify-content:center;font-size:26px;">🌐</div>
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">🎨</div>
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">⚡</div>
-        <div style="aspect-ratio:1;background:#f0f0f0;border-radius:10px;border:2px dashed #ddd;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:0.4;">🐍</div>
+    <div class="ach-card">
+      <h2>🎖️ Badges</h2>
+      <div class="badges-grid">
+        <div class="badge-box earned">🥇</div>
+        <div class="badge-box earned">🔥</div>
+        <div class="badge-box earned">🌐</div>
+        <div class="badge-box locked-b">🎨</div>
+        <div class="badge-box locked-b">⚡</div>
+        <div class="badge-box locked-b">🐍</div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div style="background:#d7f5b1;border:2px solid #58cc02;border-radius:12px;padding:16px;">
-        <div style="font-size:26px;font-weight:900;color:#3a8c00;">34</div>
-        <div style="font-size:13px;font-weight:bold;color:#3a8c00;">Lessons done</div>
-      </div>
-      <div style="background:#ddf4ff;border:2px solid #1cb0f6;border-radius:12px;padding:16px;">
-        <div style="font-size:26px;font-weight:900;color:#0a91cc;">1,240</div>
-        <div style="font-size:13px;font-weight:bold;color:#0a91cc;">Total XP</div>
-      </div>
-      <div style="background:#fff3cc;border:2px solid #ff9600;border-radius:12px;padding:16px;">
-        <div style="font-size:26px;font-weight:900;color:#a66800;">7 🔥</div>
-        <div style="font-size:13px;font-weight:bold;color:#a66800;">Day streak</div>
-      </div>
-      <div style="background:#f0d9ff;border:2px solid #a560d4;border-radius:12px;padding:16px;">
-        <div style="font-size:26px;font-weight:900;color:#a560d4;">Lvl 4</div>
-        <div style="font-size:13px;font-weight:bold;color:#a560d4;">Jr Developer</div>
-      </div>
+    <div class="stats-grid">
+      <div class="stat-box sb-green"><div class="big">34</div><div class="sm">Lessons Done</div></div>
+      <div class="stat-box sb-blue"><div class="big">1,240</div><div class="sm">Total XP</div></div>
+      <div class="stat-box sb-orange"><div class="big">7 🔥</div><div class="sm">Day Streak</div></div>
+      <div class="stat-box sb-purple"><div class="big">Lvl 4</div><div class="sm">Jr Developer</div></div>
     </div>
   </div>
-
 </div>
 
 <!-- QUIZ MODAL -->
 <div class="overlay" id="overlay" onclick="outsideClose(event)">
   <div class="modal">
     <button class="close-btn" onclick="closeQuiz()">✕</button>
-    <h2 id="quizTitle">CSS Styling</h2>
-    <h3 id="quizQuestion">What property changes text color?</h3>
-    <div class="choices" id="quizChoices"></div>
-    <div class="feedback" id="quizFeedback"></div>
-    <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>Check Answer</button>
+
+    <!-- Quiz content -->
+    <div id="quizContent">
+      <div class="quiz-progress">
+        <div class="quiz-progress-top">
+          <span class="quiz-progress-label" id="quizLessonLabel">HTML Basics</span>
+          <span class="quiz-progress-count" id="quizProgressCount">1 / 4</span>
+        </div>
+        <div class="quiz-track"><div class="quiz-fill" id="quizFill" style="width:0%"></div></div>
+      </div>
+      <div class="modal-lesson" id="quizTitle"></div>
+      <div class="modal-question" id="quizQuestion"></div>
+      <div class="choices" id="quizChoices"></div>
+      <div class="feedback" id="quizFeedback"></div>
+      <button class="check-btn" id="checkBtn" onclick="checkAnswer()" disabled>Check Answer</button>
+    </div>
+
+    <!-- Result screen -->
+    <div class="result-screen" id="resultScreen">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-title" id="resultTitle">Lesson Complete!</div>
+      <div class="result-sub" id="resultSub">Great work — keep the streak going!</div>
+      <div class="result-stats">
+        <div class="result-stat green"><div class="num" id="resCorrect">0</div><div class="lbl">Correct</div></div>
+        <div class="result-stat blue"><div class="num" id="resXP">0</div><div class="lbl">XP Earned</div></div>
+        <div class="result-stat orange"><div class="num" id="resAccuracy">0%</div><div class="lbl">Accuracy</div></div>
+      </div>
+      <button class="check-btn" onclick="closeQuiz()" style="max-width:260px;margin:0 auto;display:block;">Continue ▶</button>
+    </div>
   </div>
 </div>
 
 <script>
-  // Track which answer index is correct and which the user picked
-  let correctIdx = 0;
-  let pickedIdx = null;
+// ── QUESTION BANK ──────────────────────────────────────────────────
+const QUIZZES = {
+  html: {
+    label: '🌐 HTML Basics',
+    questions: [
+      { q: 'Which tag creates the largest heading?', choices: ['<h6>', '<h1>', '<big>', '<head>'], correct: 1 },
+      { q: 'What does HTML stand for?', choices: ['Hyper Text Markup Language', 'Home Tool Markup Language', 'Hyperlinks and Text Markup Language', 'Hyper Transfer Markup Language'], correct: 0 },
+      { q: 'Which tag is used to create a hyperlink?', choices: ['<link>', '<href>', '<a>', '<url>'], correct: 2 },
+      { q: 'What is the correct HTML element for inserting a line break?', choices: ['<break>', '<lb>', '<br>', '<newline>'], correct: 2 },
+      { q: 'Which attribute specifies where a link opens?', choices: ['rel', 'target', 'src', 'href'], correct: 1 },
+    ]
+  },
+  css: {
+    label: '🎨 CSS Styling',
+    questions: [
+      { q: 'What property changes text color in CSS?', choices: ['font-color', 'text-color', 'color', 'foreground'], correct: 2 },
+      { q: 'Which property adds space inside an element?', choices: ['margin', 'spacing', 'padding', 'border'], correct: 2 },
+      { q: 'How do you select an element with id="intro"?', choices: ['.intro', '#intro', 'intro', '*intro'], correct: 1 },
+      { q: 'Which value makes an element a flexbox container?', choices: ['display: block', 'display: flex', 'position: flex', 'layout: flex'], correct: 1 },
+      { q: 'What does "border-radius: 50%" create?', choices: ['A square', 'A triangle', 'A circle', 'An oval'], correct: 2 },
+    ]
+  },
+  js: {
+    label: '⚡ JavaScript',
+    questions: [
+      { q: 'How do you declare a variable in modern JS?', choices: ['def x', 'var or let', 'int x', 'variable x'], correct: 1 },
+      { q: 'What does console.log() do?', choices: ['Saves a file', 'Prints to the console', 'Creates an alert', 'Reloads the page'], correct: 1 },
+      { q: 'Which operator checks value AND type equality?', choices: ['==', '=', '===', '!='], correct: 2 },
+      { q: 'How do you write a comment in JavaScript?', choices: ['<!-- comment -->', '# comment', '// comment', '** comment'], correct: 2 },
+      { q: 'What will typeof "hello" return?', choices: ['"text"', '"string"', '"word"', '"char"'], correct: 1 },
+    ]
+  }
+};
 
-  // Highlight the active sidebar button
-  function setNav(btn) {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+// ── STATE ──────────────────────────────────────────────────────────
+let currentQuiz = null;
+let currentQIndex = 0;
+let pickedIdx = null;
+let answered = false;
+let correctCount = 0;
+
+// ── NAV / TABS ─────────────────────────────────────────────────────
+function setNav(btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function switchTab(btn, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+// ── QUIZ ───────────────────────────────────────────────────────────
+function openQuiz(key) {
+  currentQuiz = QUIZZES[key];
+  currentQIndex = 0;
+  correctCount = 0;
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('quizContent').style.display = 'block';
+  loadQuestion();
+  document.getElementById('overlay').classList.add('open');
+}
+
+function loadQuestion() {
+  const quiz = currentQuiz;
+  const total = quiz.questions.length;
+  const qObj = quiz.questions[currentQIndex];
+
+  pickedIdx = null;
+  answered = false;
+
+  // Progress
+  const pct = (currentQIndex / total) * 100;
+  document.getElementById('quizFill').style.width = pct + '%';
+  document.getElementById('quizProgressCount').textContent = (currentQIndex + 1) + ' / ' + total;
+  document.getElementById('quizLessonLabel').textContent = quiz.label;
+
+  document.getElementById('quizTitle').textContent = quiz.label.toUpperCase();
+  document.getElementById('quizQuestion').textContent = qObj.q;
+  document.getElementById('quizFeedback').className = 'feedback';
+  document.getElementById('quizFeedback').textContent = '';
+
+  const btn = document.getElementById('checkBtn');
+  btn.textContent = 'Check Answer';
+  btn.disabled = true;
+  btn.onclick = checkAnswer;
+
+  // Build choices
+  const box = document.getElementById('quizChoices');
+  box.innerHTML = '';
+  qObj.choices.forEach((text, i) => {
+    const b = document.createElement('button');
+    b.className = 'choice';
+    b.textContent = text;
+    b.onclick = () => pickChoice(b, i);
+    box.appendChild(b);
+  });
+}
+
+function pickChoice(btn, idx) {
+  if (answered) return;
+  document.querySelectorAll('#quizChoices .choice').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  pickedIdx = idx;
+  document.getElementById('checkBtn').disabled = false;
+}
+
+function checkAnswer() {
+  if (pickedIdx === null || answered) return;
+  answered = true;
+
+  const qObj = currentQuiz.questions[currentQIndex];
+  const btns = document.querySelectorAll('#quizChoices .choice');
+  const fb = document.getElementById('quizFeedback');
+  const btn = document.getElementById('checkBtn');
+
+  btns.forEach(b => { b.classList.remove('selected'); b.setAttribute('disabled', true); });
+
+  const isLast = currentQIndex === currentQuiz.questions.length - 1;
+
+  if (pickedIdx === qObj.correct) {
+    correctCount++;
+    btns[pickedIdx].classList.add('correct');
+    fb.className = 'feedback ok show';
+    fb.textContent = '🎉 Correct! +10 XP';
+  } else {
+    btns[pickedIdx].classList.add('wrong');
+    btns[qObj.correct].classList.add('correct');
+    fb.className = 'feedback err show';
+    fb.textContent = '❌ Not quite! The correct answer is highlighted in green.';
   }
 
-  // Show the right tab content when a tab is clicked
-  function switchTab(btn, id) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
+  if (isLast) {
+    btn.textContent = 'See Results 🏆';
+    btn.disabled = false;
+    btn.onclick = showResults;
+  } else {
+    btn.textContent = 'Next Question →';
+    btn.disabled = false;
+    btn.onclick = nextQuestion;
   }
+}
 
-  // Open the quiz modal and fill it with the lesson's question and choices
-  function openQuiz(title, question, choices, correct) {
-    correctIdx = correct;
-    pickedIdx = null;
+function nextQuestion() {
+  currentQIndex++;
+  loadQuestion();
+}
 
-    document.getElementById('quizTitle').textContent = '📘 ' + title;
-    document.getElementById('quizQuestion').textContent = question;
-    document.getElementById('quizFeedback').className = 'feedback';
-    document.getElementById('checkBtn').disabled = true;
-    document.getElementById('checkBtn').textContent = 'Check Answer';
-    document.getElementById('checkBtn').onclick = checkAnswer;
+function showResults() {
+  const total = currentQuiz.questions.length;
+  const xp = correctCount * 10;
+  const accuracy = Math.round((correctCount / total) * 100);
 
-    // Build the choice buttons dynamically
-    const box = document.getElementById('quizChoices');
-    box.innerHTML = '';
-    choices.forEach((text, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'choice';
-      btn.innerHTML = text;
-      btn.onclick = () => pickChoice(btn, i);
-      box.appendChild(btn);
-    });
+  document.getElementById('quizContent').style.display = 'none';
+  const rs = document.getElementById('resultScreen');
+  rs.classList.add('show');
 
-    document.getElementById('overlay').classList.add('open');
+  document.getElementById('resCorrect').textContent = correctCount + '/' + total;
+  document.getElementById('resXP').textContent = '+' + xp;
+  document.getElementById('resAccuracy').textContent = accuracy + '%';
+
+  if (accuracy === 100) {
+    document.getElementById('resultEmoji').textContent = '🏆';
+    document.getElementById('resultTitle').textContent = 'Perfect Score!';
+    document.getElementById('resultSub').textContent = 'Absolutely flawless. You crushed it!';
+  } else if (accuracy >= 60) {
+    document.getElementById('resultEmoji').textContent = '🎉';
+    document.getElementById('resultTitle').textContent = 'Lesson Complete!';
+    document.getElementById('resultSub').textContent = 'Great work — keep the streak going!';
+  } else {
+    document.getElementById('resultEmoji').textContent = '💪';
+    document.getElementById('resultTitle').textContent = 'Keep Practicing!';
+    document.getElementById('resultSub').textContent = 'Review the material and try again — you\'ve got this!';
   }
+}
 
-  // Highlight the selected choice and enable the check button
-  function pickChoice(btn, idx) {
-    document.querySelectorAll('#quizChoices .choice').forEach(b => {
-      b.classList.remove('correct', 'wrong');
-      b.style.cssText = '';
-    });
-    btn.style.borderColor = '#1cb0f6';
-    btn.style.background = '#ddf4ff';
-    btn.style.color = '#0a91cc';
-    pickedIdx = idx;
-    document.getElementById('checkBtn').disabled = false;
+function closeQuiz() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('quizContent').style.display = 'block';
+}
+
+function outsideClose(e) {
+  if (e.target === document.getElementById('overlay')) closeQuiz();
+}
+
+// ── DAILY CHALLENGE ────────────────────────────────────────────────
+function dailyPick(btn, isCorrect) {
+  document.querySelectorAll('#tab-practice .choice').forEach(b => b.classList.remove('correct','wrong'));
+  const fb = document.getElementById('dailyFeedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback ok show';
+    fb.textContent = '🎉 Correct! "name" completes the greeting. +15 XP!';
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'feedback err show';
+    fb.textContent = '❌ Not quite — try another option!';
   }
-
-  // Check if the user's pick is correct or wrong
-  function checkAnswer() {
-    if (pickedIdx === null) return;
-    const btns = document.querySelectorAll('#quizChoices .choice');
-    const fb = document.getElementById('quizFeedback');
-
-    btns.forEach(b => { b.style.cssText = ''; });
-
-    if (pickedIdx === correctIdx) {
-      btns[pickedIdx].classList.add('correct');
-      fb.className = 'feedback ok show';
-      fb.textContent = '🎉 Correct! +10 XP!';
-      document.getElementById('checkBtn').textContent = 'Continue ▶';
-      document.getElementById('checkBtn').onclick = closeQuiz;
-    } else {
-      btns[pickedIdx].classList.add('wrong');
-      btns[correctIdx].classList.add('correct');
-      fb.className = 'feedback err show';
-      fb.textContent = '❌ Not quite! The correct answer is in green.';
-      document.getElementById('checkBtn').textContent = 'Try Again';
-      document.getElementById('checkBtn').onclick = resetQuiz;
-    }
-  }
-
-  // Reset the quiz so the user can try again
-  function resetQuiz() {
-    document.querySelectorAll('#quizChoices .choice').forEach(b => {
-      b.classList.remove('correct', 'wrong');
-      b.style.cssText = '';
-    });
-    document.getElementById('quizFeedback').className = 'feedback';
-    document.getElementById('checkBtn').textContent = 'Check Answer';
-    document.getElementById('checkBtn').disabled = true;
-    document.getElementById('checkBtn').onclick = checkAnswer;
-    pickedIdx = null;
-  }
-
-  // Close the quiz modal
-  function closeQuiz() {
-    document.getElementById('overlay').classList.remove('open');
-    resetQuiz();
-  }
-
-  // Close modal when clicking outside of it
-  function outsideClose(e) {
-    if (e.target === document.getElementById('overlay')) closeQuiz();
-  }
-
-  // Handle the daily practice challenge
-  function dailyPick(btn, isCorrect) {
-    document.querySelectorAll('#tab-practice .choice').forEach(b => b.classList.remove('correct', 'wrong'));
-    const fb = document.getElementById('dailyFeedback');
-    if (isCorrect) {
-      btn.classList.add('correct');
-      fb.className = 'feedback ok show';
-      fb.textContent = '🎉 Correct! "name" finishes the greeting! +15 XP!';
-    } else {
-      btn.classList.add('wrong');
-      fb.className = 'feedback err show';
-      fb.textContent = '❌ Not quite — try another option!';
-    }
-  }
+}
 </script>
 </body>
 </html>
